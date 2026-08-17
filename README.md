@@ -110,6 +110,18 @@ The file is read from its beginning and then followed, with a 100 ms poll
 interval. A missing file is logged and leaves the provider running, so
 configuring a path that does not exist yet is not an error.
 
+### Restoring the instances kura-core used to create
+
+Up to Kura 6, `kura-core` shipped this bundle and its default snapshot
+pre-configured two instances. It no longer does, so after installing this package
+create them again — with these exact `kura.service.pid` values, because
+`kura.default.log.manager` in `kura.properties` still points at the first one:
+
+| `kura.service.pid` | `logFilePath` |
+|---|---|
+| `filesystem-kura-log` | `/var/log/kura.log` |
+| `filesystem-kura-audit-log` | `/var/log/kura-audit.log` |
+
 ### Line parsing
 
 The parser recognises two formats, and picks one based on the **file name**:
