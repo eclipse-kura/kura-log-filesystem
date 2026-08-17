@@ -58,7 +58,10 @@
                         Bundle-ActivationPolicy: lazy
                         Service-Component: OSGI-INF/*.xml
                         Import-Package: \
+                            org.eclipse.kura;version="[1.0,2.0)",\
+                            org.eclipse.kura.configuration;version="[1.0,2.0)",\
                             org.eclipse.kura.log;version="[1.1,1.2)",\
+                            org.eclipse.kura.log.listener;version="[1.0,2.0)",\
                             *
                         -includeresource: about_files=about_files/,\
                             about.html,\
