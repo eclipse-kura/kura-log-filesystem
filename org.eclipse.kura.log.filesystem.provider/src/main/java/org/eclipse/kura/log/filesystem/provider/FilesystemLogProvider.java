@@ -78,7 +78,7 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
         this.registeredListeners.remove(listener);
     }
 
-    class FileLogReader extends Thread {
+    class FileLogReader implements Runnable {
 
         private static final long SAMPLE_INTERVAL = 100;
         private static final long JOIN_TIMEOUT = 2000;
@@ -86,6 +86,7 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
         private final long startPosition;
         private volatile long position;
         private volatile boolean follow = true;
+        private Thread thread;
 
         public FileLogReader(String filePath, long startPosition) {
             this.logFile = new File(filePath);
@@ -98,11 +99,18 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
             return this.position;
         }
 
+        void start() {
+            this.thread = Thread.ofVirtual().name("FilesystemLogProvider-" + this.logFile.getName()).start(this);
+        }
+
         void stopAndJoin() {
             this.follow = false;
-            interrupt();
+            if (this.thread == null) {
+                return;
+            }
+            this.thread.interrupt();
             try {
-                join(JOIN_TIMEOUT);
+                this.thread.join(JOIN_TIMEOUT);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -116,7 +124,7 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
                 while (this.follow) {
                     readLinesAndNotifyListeners(file);
                     this.position = file.getFilePointer();
-                    sleep(SAMPLE_INTERVAL);
+                    Thread.sleep(SAMPLE_INTERVAL);
                 }
             } catch (FileNotFoundException fnf) {
                 logger.error("File '{}' not found.", this.logFile.getPath());
