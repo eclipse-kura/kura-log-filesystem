@@ -1,0 +1,26 @@
+name: Kura SBOM upload
+
+on:
+  schedule:
+    # At 00:00 on Sunday
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+    inputs:
+        target_branch:
+          type: string
+          default: 'develop'
+          required: true
+  workflow_run:
+    workflows: ["Release Notes automation"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  call-workflow-in-public-repo:
+    uses: eclipse-kura/.github/.github/workflows/_shared-sbom-cyclonedx.yml@main
+    with:
+      dependency-track-id: '90bbef7b-af37-491a-9968-4b26331694b5'
