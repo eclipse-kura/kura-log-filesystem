@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Eurotech and/or its affiliates and others
+ * Copyright (c) 2021, 2026 Eurotech and/or its affiliates and others
  *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -47,18 +47,23 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
     protected void deactivate() {
         logger.info("Deactivating FilesystemLogProvider...");
         if (this.readerThread != null) {
-            this.readerThread.interrupt();
+            this.readerThread.stopAndJoin();
         }
         logger.info("Deactivating FilesystemLogProvider... Done.");
     }
 
     public void updated(Map<String, Object> properties) {
         logger.info("Updated FilesystemLogProvider...");
+        String newFilePath = (String) properties.get(LOG_FILEPATH_PROP_KEY);
+        long startPosition = 0;
         if (this.readerThread != null) {
-            this.readerThread.interrupt();
+            this.readerThread.stopAndJoin();
+            if (newFilePath != null && newFilePath.equals(this.filePath)) {
+                startPosition = this.readerThread.getPosition();
+            }
         }
-        this.filePath = (String) properties.get(LOG_FILEPATH_PROP_KEY);
-        this.readerThread = new FileLogReader(this.filePath);
+        this.filePath = newFilePath;
+        this.readerThread = new FileLogReader(this.filePath, startPosition);
         this.readerThread.start();
         logger.info("Updated FilesystemLogProvider... Done.");
     }
@@ -76,19 +81,41 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
     class FileLogReader extends Thread {
 
         private static final long SAMPLE_INTERVAL = 100;
+        private static final long JOIN_TIMEOUT = 2000;
         private final File logFile;
-        private boolean follow = true;
+        private final long startPosition;
+        private volatile long position;
+        private volatile boolean follow = true;
 
-        public FileLogReader(String filePath) {
+        public FileLogReader(String filePath, long startPosition) {
             this.logFile = new File(filePath);
+            this.startPosition = startPosition;
+            this.position = startPosition;
             this.follow = true;
+        }
+
+        long getPosition() {
+            return this.position;
+        }
+
+        void stopAndJoin() {
+            this.follow = false;
+            interrupt();
+            try {
+                join(JOIN_TIMEOUT);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
         @Override
         public void run() {
             try (RandomAccessFile file = new RandomAccessFile(this.logFile, "r")) {
+                file.seek(Math.min(this.startPosition, file.length()));
+                this.position = file.getFilePointer();
                 while (this.follow) {
                     readLinesAndNotifyListeners(file);
+                    this.position = file.getFilePointer();
                     sleep(SAMPLE_INTERVAL);
                 }
             } catch (FileNotFoundException fnf) {
