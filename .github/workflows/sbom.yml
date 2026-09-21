@@ -21,6 +21,6 @@ permissions:
 
 jobs:
   call-workflow-in-public-repo:
-    uses: eclipse-kura/.github/.github/workflows/_shared-sbom-cyclonedx.yml@main
+    uses: eclipse-kura/.github/.github/workflows/_shared-sbom-cyclonedx.yml@9d1e7eeace32039d48c03cd8a511c057787d2d76
     with:
       dependency-track-id: '90bbef7b-af37-491a-9968-4b26331694b5'
