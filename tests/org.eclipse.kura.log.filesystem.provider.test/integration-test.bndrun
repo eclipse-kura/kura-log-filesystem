@@ -160,7 +160,6 @@ Test-Cases: ${classes;CONCRETE;PUBLIC;NAMED;*Test}
 	org.eclipse.kura.log.filesystem.provider;version='[2.0.0,2.0.1)',\
 	org.eclipse.kura.log.filesystem.provider.test;version='[2.0.0,2.0.1)',\
 	org.eclipse.kura.request.handler.jaxrs;version='[2.0.0,2.0.1)',\
-	org.eclipse.kura.rest.configuration.provider;version='[2.0.0,2.0.1)',\
 	org.eclipse.kura.rest.provider;version='[2.0.0,2.0.1)',\
 	org.eclipse.kura.rest.security.provider;version='[2.0.0,2.0.1)',\
 	org.eclipse.kura.useradmin.store;version='[2.0.0,2.0.1)',\
@@ -169,7 +168,6 @@ Test-Cases: ${classes;CONCRETE;PUBLIC;NAMED;*Test}
 	org.eclipse.osgitech.rest;version='[1.2.3,1.2.4)',\
 	org.eclipse.osgitech.rest.servlet.whiteboard;version='[1.2.3,1.2.4)',\
 	org.eclipse.osgitech.rest.sse;version='[1.2.3,1.2.4)',\
-	org.eclipse.soda.dk.comm;version='[2.0.0,2.0.1)',\
 	org.glassfish.hk2.api;version='[3.1.1,3.1.2)',\
 	org.glassfish.hk2.external.aopalliance-repackaged;version='[3.1.1,3.1.2)',\
 	org.glassfish.hk2.locator;version='[3.1.1,3.1.2)',\
@@ -204,4 +202,5 @@ Test-Cases: ${classes;CONCRETE;PUBLIC;NAMED;*Test}
 	osgi.cmpn;version='[4.2.0,4.2.1)',\
 	quartz;version='[2.5.0,2.5.1)',\
 	slf4j.api;version='[2.0.17,2.0.18)',\
-	usb4java-javax;version='[2.0.0,2.0.1)'
+	usb4java-javax;version='[2.0.0,2.0.1)',\
+	com.google.protobuf;version='[4.30.2,4.30.3)'
