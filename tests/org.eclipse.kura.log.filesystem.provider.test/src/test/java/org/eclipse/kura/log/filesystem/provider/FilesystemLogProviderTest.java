@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Eurotech and/or its affiliates and others
- * 
+ * Copyright (c) 2021, 2026 Eurotech and/or its affiliates and others
+ *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *  Eurotech
  ******************************************************************************/
@@ -25,10 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.kura.log.LogEntry;
 import org.eclipse.kura.log.listener.LogListener;
-
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 
@@ -275,7 +273,8 @@ public class FilesystemLogProviderTest {
 
     private void waitUntilListenersAreNotified(int times) {
         for (LogListener listener : this.listeners) {
-            verify(listener, timeout(LISTENER_CALL_TIMEOUT).times(times)).newLogEntry(ArgumentMatchers.any(LogEntry.class));
+            verify(listener, timeout(LISTENER_CALL_TIMEOUT).times(times))
+                    .newLogEntry(ArgumentMatchers.any(LogEntry.class));
         }
     }
 }

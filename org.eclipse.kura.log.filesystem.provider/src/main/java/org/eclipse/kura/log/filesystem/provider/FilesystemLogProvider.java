@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.eclipse.kura.log.LogEntry;
 import org.eclipse.kura.log.LogProvider;
@@ -100,7 +99,9 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
         }
 
         void start() {
-            this.thread = Thread.ofVirtual().name("FilesystemLogProvider-" + this.logFile.getName()).start(this);
+            this.thread = Thread.ofVirtual()
+                    .name("FilesystemLogProvider-" + this.logFile.getName())
+                    .start(this);
         }
 
         void stopAndJoin() {
@@ -190,7 +191,7 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
         private boolean isStacktrace(String line) {
             /*
              * stacktrace lines do not start with a timestamp
-             * 
+             *
              * in kura-audit log file the lines start with a '<'
              */
             return line.length() > 4 && !line.substring(0, 4).matches("\\d{4}") && !line.startsWith("<");
@@ -206,5 +207,4 @@ public class FilesystemLogProvider implements ConfigurableComponent, LogProvider
             }
         }
     }
-
 }

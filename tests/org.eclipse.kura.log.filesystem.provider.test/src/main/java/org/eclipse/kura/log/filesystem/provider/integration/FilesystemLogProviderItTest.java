@@ -27,7 +27,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import org.eclipse.kura.configuration.ConfigurationService;
 import org.eclipse.kura.log.LogEntry;
 import org.eclipse.kura.log.LogProvider;
@@ -156,7 +155,9 @@ public class FilesystemLogProviderItTest {
             assertNotNull("no log entry delivered in " + TIMEOUT_SECONDS + " seconds", entry);
             assertEquals("main", entry.getProperties().get("_PID"));
             assertEquals("INFO", entry.getProperties().get("PRIORITY"));
-            assertEquals("o.e.k.i.Test - integration test line", entry.getProperties().get("MESSAGE"));
+            assertEquals(
+                    "o.e.k.i.Test - integration test line",
+                    entry.getProperties().get("MESSAGE"));
             assertEquals(logFile.toString(), entry.getProperties().get("_TRANSPORT"));
         } finally {
             logProvider.unregisterLogListener(listener);
@@ -181,8 +182,7 @@ public class FilesystemLogProviderItTest {
             Thread.sleep(500);
         }
 
-        throw new IllegalStateException("no " + clazz.getSimpleName() + " service matching " + filter + " in "
-                + TIMEOUT_SECONDS + " seconds");
+        throw new IllegalStateException(
+                "no " + clazz.getSimpleName() + " service matching " + filter + " in " + TIMEOUT_SECONDS + " seconds");
     }
-
 }
